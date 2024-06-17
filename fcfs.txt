@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Process {
+    private final String name;
+    private final int arrivalTime;
+    private final int burstTime;
+
+    public Process(String name, int arrivalTime, int burstTime) {
+        this.name = name;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+    }
+
+    public String getName() { return name; }
+    public int getArrivalTime() { return arrivalTime; }
+    public int getBurstTime() { return burstTime; }
+}
+
+public class FCFS {
+    public static void main(String[] args) {
+        List<Process> processes = List.of(
+            new Process("P1", 0, 24),
+            new Process("P2", 0, 3),
+            new Process("P3", 0, 3)
+        );
+
+        int totalTime = 0, totalTurnaround = 0, totalWaiting = 0;
+
+        System.out.println("Process\tArrival\tBurst\tCompletion\tTurnaround\tWaiting");
+
+        for (Process p : processes) {
+            int completionTime = totalTime + p.getBurstTime();
+            int turnaroundTime = completionTime - p.getArrivalTime();
+            int waitingTime = turnaroundTime - p.getBurstTime();
+
+            System.out.printf("%s\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d%n",
+                    p.getName(), p.getArrivalTime(), p.getBurstTime(),
+                    completionTime, turnaroundTime, waitingTime);
+
+            totalTime = completionTime;
+            totalTurnaround += turnaroundTime;
+            totalWaiting += waitingTime;
+        }
+
+        System.out.printf("\nAverage Turnaround Time: %.2f%n", (double) totalTurnaround / processes.size());
+        System.out.printf("Average Waiting Time: %.2f%n", (double) totalWaiting / processes.size());
+    }
+}
+1
